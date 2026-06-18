@@ -1,10 +1,8 @@
 ---
 layout: post
 title: "Building and scaling evals for AI agents: Harness, eval set, graders"
+image: /assets/evals-for-ai-agents/graders.png
 ---
-
-* TOC
-{:toc}
 
 # TLDR
 This is an end-to-end guide to creating an eval for an agent. An eval has three parts: **harness** (runs the agent, captures traces), 
@@ -16,6 +14,10 @@ LLM judge, actually use the evals to improve the agent, synthesize learnings and
 Good if you've decided to build evals and need an end-to-end guide.
 
 **Repo**: https://github.com/nicpo/ai-agent-evals
+
+# Contents
+* TOC
+{:toc}
 
 # What are evals and when you need them
 The purpose of evals is to check if the agent is in alignment with your goals, and measurably bring it into alignment if not. 
@@ -216,7 +218,7 @@ The early Roman Empire around 62-66 AD is big and runs on taxes collected from i
 
 **Side note: why Rome?** Be honest: would *you* pass an opportunity to work with timestamps like `0070-04-10`?
 
-![YouGov poll: 9% of Americans think about Rome weekly](/assets/evals-for-ai-agents/how_often.jpg)
+![YouGov poll: 9% of Americans think about Rome weekly](/assets/evals-for-ai-agents/how_often.jpg){: style="max-width: 400px"}
 
 
 ## Model choice
@@ -291,8 +293,8 @@ Let's collate learnings from what we've done, and see how they survive beyond ou
 |---|---|---|---|
 |**Graders**||||
 |Use deterministic graders when you have ground truth|A correct result set exists|Agent writes prose: reports or slides|LLM judge becomes primary (if not *the*) grader|
-|Decompose the metric|<ol><li>One score for tracking progress: here, our headline metric is Adjusted Accuracy (includes EX + LLM judge)</li><li>Separate dimensions for debugging: EX, faithfulness etc.</li></ol>|Some stakeholders (like execs) want one metric|Keep a separate dashboard / report with the headline metric and another one with separate dimensions|
-|Calibrate the judge|Works for one agent|Several agents with different rubrics|<ul><li>One rubric for shared dimensions</li><li>A small gold set (~10-15 human-checked examples) per tool; run when rubric or judge model changes</li></ul>|
+|Decompose the metric|1. One score for tracking progress: here, our headline metric is Adjusted Accuracy (includes EX + LLM judge)<br>2. Separate dimensions for debugging: EX, faithfulness etc.|Some stakeholders (like execs) want one metric|Keep a separate dashboard / report with the headline metric and another one with separate dimensions|
+|Calibrate the judge|Works for one agent|Several agents with different rubrics|• One rubric for shared dimensions<br>• A small gold set (~10-15 human-checked examples) per tool; run when rubric or judge model changes|
 |**Eval set**||||
 |Quality over quantity|A few diverse evals is better than many variations on the same theme|If your agent works with 50 different question types, having 20 evals each for 4 of them isn't enough|Create individual eval sets for different question types|
 |Manual evals review|Manually review LLM-generated evals|Tractable for 61 evals, spot-checking works for 100's|With 1000's, need "eval for eval": sample the eval set, grade samples with an LLM judge, track agreement|
@@ -329,12 +331,12 @@ When you move to production and start scaling beyond one agent made by one team.
 
 # Resources
 
-Anthropic (2026). "Demystifying evals for AI agents", https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
+Anthropic (2026). "Demystifying evals for AI agents", [https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
 
-Husain, H. (2024). "Your AI Product Needs Evals": https://hamel.dev/blog/posts/evals/
+Husain, H. (2024). "Your AI Product Needs Evals", [https://hamel.dev/blog/posts/evals/](https://hamel.dev/blog/posts/evals/)
 
-Kim et al. (2025). "FLEX: Expert-level False-Less EXecution Metric for Text-to-SQL Benchmark", https://aclanthology.org/2025.naacl-long.228
+Kim et al. (2025). "FLEX: Expert-level False-Less EXecution Metric for Text-to-SQL Benchmark", [https://aclanthology.org/2025.naacl-long.228](https://aclanthology.org/2025.naacl-long.228)
 
-Lei et al. (2024). "Spider 2.0: Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows" https://arxiv.org/abs/2411.07763
+Lei et al. (2024). "Spider 2.0: Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows", [https://arxiv.org/abs/2411.07763](https://arxiv.org/abs/2411.07763)
 
-Yu et al. (2018). "Spider: A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Semantic Parsing and Text-to-SQL Task", https://arxiv.org/abs/1809.08887
+Yu et al. (2018). "Spider: A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Semantic Parsing and Text-to-SQL Task", [https://arxiv.org/abs/1809.08887](https://arxiv.org/abs/1809.08887)
