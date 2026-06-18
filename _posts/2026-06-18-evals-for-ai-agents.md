@@ -13,7 +13,7 @@ LLM judge, actually use the evals to improve the agent, synthesize learnings and
 
 Good if you've decided to build evals and need an end-to-end guide.
 
-**Repo**: https://github.com/nicpo/ai-agent-evals
+**Repo**: [https://github.com/nicpo/ai-agent-evals](https://github.com/nicpo/ai-agent-evals)
 
 # Contents
 * TOC
