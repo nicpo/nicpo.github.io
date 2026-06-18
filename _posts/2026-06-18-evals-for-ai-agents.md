@@ -254,10 +254,10 @@ Check for:
 1. Column consistency. A few gold SQL had more columns in `SELECT` than the question asked for.
 
 ## Graders
-1. Deterministic graders are correct
+1. We've checked that deterministic graders are correct.
     * See the examples for aliases and join counts in "Checking graders for correctness" above
-1. LLM judge rubrics are calibrated
-    * The false-positive LLM judge initially flagged `WHERE annual_tribute IS NOT NULL` as an error. Rather, it's a redundant filter on a non-nullable field. Fix was to update the judge rubric to distinguish harmless additions from actual flaws. 
+1. LLM judge rubrics are now calibrated
+    * We updated the false-positive LLM judge's rubric to distinguish harmless additions (like `WHERE field IS NOT NULL` on a non-nullable field) from actual flaws.
 
 
 # Evals -> agent improvement
