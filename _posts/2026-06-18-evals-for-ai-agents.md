@@ -5,6 +5,7 @@ image: /assets/evals-for-ai-agents/graders.png
 ---
 
 # TLDR
+{: .no_toc}
 This is an end-to-end guide to creating an eval for an agent. An eval has three parts: **harness** (runs the agent, captures traces), 
 **eval set** (questions + gold answers) and **graders** (deterministic + LLM judge).
 
@@ -13,9 +14,10 @@ LLM judge, actually use the evals to improve the agent, synthesize learnings and
 
 Good if you've decided to build evals and need an end-to-end guide.
 
-**Repo**: [https://github.com/nicpo/ai-agent-evals](https://github.com/nicpo/ai-agent-evals)
+**Code**: [https://github.com/nicpo/ai-agent-evals](https://github.com/nicpo/ai-agent-evals)
 
 # Contents
+{: .no_toc}
 * TOC
 {:toc}
 
@@ -102,6 +104,8 @@ Graders measure if the agent's output is correct, and how correct. We have 5 tie
 3. Returned data correctness: did we get the right data?
 4. False positive/false negative checks: did we get the right data *for the wrong reason*? Or if the answer is wrong, is it wrong in a way that matters?
 5. Communicating results: did it communicate the answer well?
+
+Here's our final grader set:
 
 ![Five tiers of graders: deterministic and LLM-based](/assets/evals-for-ai-agents/graders.png)
 
@@ -199,6 +203,8 @@ In this project, we have a SQLite database, 3 tools the agent can use (`get_sche
 
 
 ## Agent
+
+This is the architecture of our agent:
 
 ![Agent architecture: question in, SQL query, DB result, natural-language answer out](/assets/evals-for-ai-agents/agent_arch.png)
 
