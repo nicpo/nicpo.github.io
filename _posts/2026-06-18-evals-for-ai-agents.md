@@ -116,11 +116,11 @@ Our agent also writes a natural-language response. We'll evaluate it with an LLM
 
 ## Deterministic
 
-1. [Tool use](graders/tool_call.py): check which tools the agent called, whether the query didn't return an error and whether the agent self-corrected if there was an error.
+1. [Tool use](https://github.com/nicpo/ai-agent-evals/blob/main/graders/tool_call.py): check which tools the agent called, whether the query didn't return an error and whether the agent self-corrected if there was an error.
 
-1. [SQL structure](graders/sql_structural.py): use [sqlglot](https://sqlglot.com/sqlglot.html): to parse the agent's query and identify any hallucinated columns
+1. [SQL structure](https://github.com/nicpo/ai-agent-evals/blob/main/graders/sql_structural.py): use [sqlglot](https://sqlglot.com/sqlglot.html): to parse the agent's query and identify any hallucinated columns
 
-1. [Returned data correctness](graders/execution.py): run both the agent's SQL and the gold SQL against the DB and compare result sets (this is Execution Accuracy, **EX**); also compare which SQL clauses match the gold query: `SELECT, WHERE, GROUP BY, ORDER BY`, and `JOIN` type (Exact Set Match, ESM).
+1. [Returned data correctness](https://github.com/nicpo/ai-agent-evals/blob/main/graders/execution.py): run both the agent's SQL and the gold SQL against the DB and compare result sets (this is Execution Accuracy, **EX**); also compare which SQL clauses match the gold query: `SELECT, WHERE, GROUP BY, ORDER BY`, and `JOIN` type (Exact Set Match, ESM).
 
 
 ### Checking graders for correctness
