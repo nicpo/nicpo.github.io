@@ -4,8 +4,6 @@ description: >
   Writing about AI agents, evaluation, and what it takes to put ML into production.
   Author of Mass Automation (2025). PhD.
 url: "https://nicpo.github.io"
-author:
-  name: Nick Pogrebnyakov
 
 theme: minima
 github_username: nicpo
@@ -18,5 +16,7 @@ header_pages:
 permalink: /:year/:month/:day/:title/
 
 markdown: kramdown
+kramdown:
+  toc_levels: 1..2
 plugins:
   - jekyll-feed
