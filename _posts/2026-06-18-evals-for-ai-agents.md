@@ -3,24 +3,15 @@ layout: post
 title: "Building and scaling evals for AI agents: Harness, eval set, graders"
 ---
 
-# Building and scaling evals for AI agents
-<h2><i>Harness, eval set, graders</i></h2>
-===
+* TOC
+{:toc}
 
 # TLDR
-This is an end-to-end guide to creating an eval for an agent. An eval is: harness + eval set + graders. Here's what it describes:
-1. Set up the environment: agent, 3 tools and a DB <- optional if you have an actual env
-1. Create an eval set: questions and gold answers
-1. Manually check the eval set
-1. Create graders:
-    * deterministic: result set match, SQL structure similarity between gold SQL and written by the agent
-    * LLM-as-a-judge: double-check for false positives / false negatives from deterministic graders + evaluation of the agent's natural language response
-1. Define the eval harness: I used `langchain` for easy model/provider swap and tool calling
-1. Calibrate the graders: check if deterministic graders output what's expected and LLM judge are coherent
-1. Run the entire eval suite through the harness
-1. Look at the result and improve the agent
-1. Learnings and production considerations: going beyond a single agent
-1. Where to go from here
+This is an end-to-end guide to creating an eval for an agent. An eval has three parts: **harness** (runs the agent, captures traces), 
+**eval set** (questions + gold answers) and **graders** (deterministic + LLM judge).
+
+Here we build all three from scratch for a text-to-SQL agent. Then we calibrate the 
+LLM judge, actually use the evals to improve the agent, synthesize learnings and see how they scale beyond one agent and one team.
 
 Good if you've decided to build evals and need an end-to-end guide.
 
@@ -29,7 +20,7 @@ Good if you've decided to build evals and need an end-to-end guide.
 # What are evals and when you need them
 The purpose of evals is to check if the agent is in alignment with your goals, and measurably bring it into alignment if not. 
 
-![Components of evals](assets/evals-for-ai-agents/eval.png)
+![Components of evals](/assets/evals-for-ai-agents/eval.png)
 
 3 components to an eval:
 1. Harness: runs the agent, saves traces
@@ -77,7 +68,7 @@ I created 61 evals. That might seem low. If you're in ML, you're probably used t
 "Quality over quantity" is an evals mantra: better have a few high quality, diverse evals than many repetitive ones.
 
 Again, a contrast with ML. There, examples close to the decision boundary are the most challenging ones: for a dog-vs-cat image classifier, is this furry creature a dog or a cat? You want more of them in test to ensure the model is systematically correct
-![Borderline examples near the decision boundary](assets/evals-for-ai-agents/spy_among_us.jpg)
+![Borderline examples near the decision boundary](/assets/evals-for-ai-agents/spy_among_us.jpg)
 
 
 ## Levels of evals
@@ -109,7 +100,7 @@ Graders measure if the agent's output is correct, and how correct. We have 5 tie
 4. False positive/false negative checks: did we get the right data *for the wrong reason*? Or if the answer is wrong, is it wrong in a way that matters?
 5. Communicating results: did it communicate the answer well?
 
-![Five tiers of graders: deterministic and LLM-based](assets/evals-for-ai-agents/graders.png)
+![Five tiers of graders: deterministic and LLM-based](/assets/evals-for-ai-agents/graders.png)
 
 SQL is interesting: there *is* a correct answer, so we can use deterministic graders. But that correct answer might be right for a wrong reasons, so we need to double-check the deterministic grader.
 
@@ -206,7 +197,7 @@ In this project, we have a SQLite database, 3 tools the agent can use (`get_sche
 
 ## Agent
 
-![Agent architecture: question in, SQL query, DB result, natural-language answer out](assets/evals-for-ai-agents/agent_arch.png)
+![Agent architecture: question in, SQL query, DB result, natural-language answer out](/assets/evals-for-ai-agents/agent_arch.png)
 
 The agent:
 * Takes a natural-language question from the user ("What was our tribute revenue in the year 62 AD?")
@@ -216,7 +207,7 @@ The agent:
 
 
 ## Database schema
-![Database schema for the Ancient Rome tribute system](assets/evals-for-ai-agents/db_schema.png)
+![Database schema for the Ancient Rome tribute system](/assets/evals-for-ai-agents/db_schema.png)
 
 ### Administration of Ancient Rome (aka domain context)
 The early Roman Empire around 62-66 AD is big and runs on taxes collected from its provinces. Each province has a target: how much tax it owes Rome. Officials (governors, senators, tribunes) are assigned to collect it. Every year, a tribute record is filed: how much was owed, how much was actually collected, and if there was a shortfall, why - `corruption, famine, rebellion` or `war`. Some provinces are governed normally, others are contested or abandoned. *D*ollars are called *d*enarii - easy to remember.
@@ -225,7 +216,7 @@ The early Roman Empire around 62-66 AD is big and runs on taxes collected from i
 
 **Side note: why Rome?** Be honest: would *you* pass an opportunity to work with timestamps like `0070-04-10`?
 
-![YouGov poll: 9% of Americans think about Rome weekly](assets/evals-for-ai-agents/how_often.jpg)
+![YouGov poll: 9% of Americans think about Rome weekly](/assets/evals-for-ai-agents/how_often.jpg)
 
 
 ## Model choice
@@ -266,15 +257,15 @@ Now that we have a well-functioning harness, human-reviewed gold dataset and cal
 
 **v1**. The agent started with 2 tools: `run_query` and `get_sample_rows`. Looking at the traces, the first tool call is always to get_sample_rows - the agent is trying to figure out the structure of the database:
 
-![Tool call sequence in v1: get_sample_rows first](assets/evals-for-ai-agents/tool_calls_v4.png)
+![Tool call sequence in v1: get_sample_rows first](/assets/evals-for-ai-agents/tool_calls_v4.png)
 
 **v2**. Let's help the agent and add a tool that returns the schema: `get_schema`. The accuracy (EX and Adjusted Correctess) is about the same and LLM calls went down, but the number of tokens shot up. And now the first tool call is to `get_schema`.
 
-![Tool call sequence in v2: get_schema replaces get_sample_rows](assets/evals-for-ai-agents/tool_calls_v2.png)
+![Tool call sequence in v2: get_schema replaces get_sample_rows](/assets/evals-for-ai-agents/tool_calls_v2.png)
 
 **v3**. Since the agent is always querying the schema before writing a query (which makes sense), why don't we add the schema to the system prompt and save the agent one tool call. And look, now the agent writes many queries immediately and only makes 1 tool call to run the query.
 
-![Tool call sequence in v3: schema in prompt, agent goes straight to run_query](assets/evals-for-ai-agents/tool_calls_v3.png)
+![Tool call sequence in v3: schema in prompt, agent goes straight to run_query](/assets/evals-for-ai-agents/tool_calls_v3.png)
 
 |Version|Agent spec|EX|Adjusted Correctness|Mean tokens|Mean LLM calls|
 |---|---|---|---|---|---|
