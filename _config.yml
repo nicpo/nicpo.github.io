@@ -8,12 +8,9 @@ author:
   name: Nick Pogrebnyakov
   email: nick@andmails.com
 
-# Social links shown in minima footer
-minima:
-  skin: classic
-  social_links:
-    - { platform: linkedin,       user_url: "https://linkedin.com/in/pogrebnyakov" }
-    - { platform: github,         username: nicpo }
+theme: minima
+github_username: nicpo
+linkedin_username: pogrebnyakov
 
 # Navigation
 header_pages:
