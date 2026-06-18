@@ -1,0 +1,26 @@
+title: Nick Pogrebnyakov
+tagline: "Data scientist, AI researcher, author"
+description: >
+  Writing about AI agents, evaluation, and what it takes to put ML into production.
+  Author of Mass Automation (2025). PhD.
+url: "https://nicpo.github.io"
+author:
+  name: Nick Pogrebnyakov
+  email: nick@andmails.com
+
+# Social links shown in minima footer
+minima:
+  skin: classic
+  social_links:
+    - { platform: linkedin,       user_url: "https://linkedin.com/in/pogrebnyakov" }
+    - { platform: github,         username: nicpo }
+
+# Navigation
+header_pages:
+  - about/index.md
+
+permalink: /:year/:month/:day/:title/
+
+markdown: kramdown
+plugins:
+  - jekyll-feed
