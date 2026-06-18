@@ -69,8 +69,9 @@ I created 61 evals. That might seem low. If you're in ML, you're probably used t
 
 "Quality over quantity" is an evals mantra: better have a few high quality, diverse evals than many repetitive ones.
 
-Again, a contrast with ML. There, examples close to the decision boundary are the most challenging ones: for a dog-vs-cat image classifier, is this furry creature a dog or a cat? You want more of them in test to ensure the model is systematically correct
-![Borderline examples near the decision boundary](/assets/evals-for-ai-agents/spy_among_us.jpg)
+Again, a contrast with ML. There, examples close to the decision boundary are the most challenging ones: for a dog-vs-cat image classifier, is this furry creature a dog or a cat? You want more of them in test to ensure the model is systematically correct.
+
+![Borderline examples near the decision boundary](/assets/evals-for-ai-agents/spy_among_us.jpg){: style="max-width: 400px"}
 
 
 ## Levels of evals
@@ -275,7 +276,7 @@ Now that we have a well-functioning harness, human-reviewed gold dataset and cal
 |v2|Add 3rd tool: `get_schema`|31%|82%|9,875|3.5|
 |v3|Schema in system prompt, remove `get_schema` tool|38%|80%|8,737|2.4|
 
-**We improved our agent!**. It's now more efficient while being as accurate.
+**We improved our agent!** It's now more efficient while being as accurate.
 * Avg tokens: down
 * Avg tool calls: down
 * Query correctness: about the same
