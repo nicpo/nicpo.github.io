@@ -1,0 +1,16 @@
+---
+---
+@import "minima";
+
+// Auto-numbered headings in posts. Add {: .no_toc} to a heading to skip it.
+.post-content {
+  counter-reset: h1;
+
+  h1:not(.no_toc) { counter-increment: h1; counter-reset: h2; }
+  h2:not(.no_toc) { counter-increment: h2; counter-reset: h3; }
+  h3:not(.no_toc) { counter-increment: h3; }
+
+  h1:not(.no_toc)::before { content: counter(h1) ". "; }
+  h2:not(.no_toc)::before { content: counter(h1) "." counter(h2) ". "; }
+  h3:not(.no_toc)::before { content: counter(h1) "." counter(h2) "." counter(h3) ". "; }
+}

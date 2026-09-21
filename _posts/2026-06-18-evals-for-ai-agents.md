@@ -116,11 +116,11 @@ Our agent also writes a natural-language response. We'll evaluate it with an LLM
 
 ## Deterministic
 
-1. [Tool use](https://github.com/nicpo/ai-agent-evals/blob/main/graders/tool_call.py): check which tools the agent called, whether the query didn't return an error and whether the agent self-corrected if there was an error.
+**(1)** [Tool use](https://github.com/nicpo/ai-agent-evals/blob/main/graders/tool_call.py): check which tools the agent called, whether the query didn't return an error and whether the agent self-corrected if there was an error.
 
-1. [SQL structure](https://github.com/nicpo/ai-agent-evals/blob/main/graders/sql_structural.py): use [sqlglot](https://sqlglot.com/sqlglot.html): to parse the agent's query and identify any hallucinated columns
+**(2)** [SQL structure](https://github.com/nicpo/ai-agent-evals/blob/main/graders/sql_structural.py): use [sqlglot](https://sqlglot.com/sqlglot.html): to parse the agent's query and identify any hallucinated columns
 
-1. [Returned data correctness](https://github.com/nicpo/ai-agent-evals/blob/main/graders/execution.py): run both the agent's SQL and the gold SQL against the DB and compare result sets (this is Execution Accuracy, **EX**); also compare which SQL clauses match the gold query: `SELECT, WHERE, GROUP BY, ORDER BY`, and `JOIN` type (Exact Set Match, ESM).
+**(3)** [Returned data correctness](https://github.com/nicpo/ai-agent-evals/blob/main/graders/execution.py): run both the agent's SQL and the gold SQL against the DB and compare result sets (this is Execution Accuracy, **EX**); also compare which SQL clauses match the gold query: `SELECT, WHERE, GROUP BY, ORDER BY`, and `JOIN` type (Exact Set Match, ESM).
 
 
 ### Checking graders for correctness
@@ -131,7 +131,8 @@ After you run your eval set through these graders, eyeball 20-30 eval examples, 
 
 ## LLM as a judge
 
-4a/4b. Depending on EX, I use an LLM judge to double-check for over- or under-zealousness of the deterministic grader (this idea is from Kim et al., 2025):
+**(4a/4b)** Depending on EX, I use an LLM judge to double-check for over- or under-zealousness of the deterministic grader (this idea is from [Kim et al., 2025](https://aclanthology.org/2025.naacl-long.228)):
+
 a. EX = result sets match: check for false positive
 b. EX = don't match: check for false negative.
 
@@ -139,10 +140,14 @@ These checks produce **Adjusted Correctness**: the agent's answer was substantiv
 * EX passed and (a) said "not an FP"
 * EX failed but (b) said there's a valid alternative interpretation
 
-5. Quality of the natural language answer:
+**(5)** Quality of the natural language answer:
+
 a. Faithfulness: whether the nat-lang answer accurately reflects the output from the DB (this can also be taken off the shelf as a [deepeval metric](https://deepeval.com/docs/metrics-faithfulness))
+
 b. Uncertainty acknowledgment: whether the answer acknowledges any "non-standard" results (`NULL`s, zero rows, ties)
+
 c. Question alignment: check if the answer addresses the question as asked
+
 d. (optional) Error recovery: if the agent's query failed, check if the agent fixed the error
 
 
@@ -223,7 +228,7 @@ The early Roman Empire around 62-66 AD is big and runs on taxes collected from i
 
 (Fact check: tribunes in the Empire actually didn't collect provincial taxes. Didn't expect to learn that in a post about evals, did ya.)
 
-**Side note: why Rome?** Be honest: would *you* pass an opportunity to work with timestamps like `0070-04-10`?
+*Side note: why Rome?* Be honest: would **you** pass an opportunity to work with timestamps like `0070-04-10`?
 
 ![YouGov poll: 9% of Americans think about Rome weekly](/assets/evals-for-ai-agents/how_often.jpg){: style="max-width: 400px"}
 
@@ -276,17 +281,17 @@ Now that we have a well-functioning harness, human-reviewed gold dataset and cal
 
 ![Tool call sequence in v3: schema in prompt, agent goes straight to run_query](/assets/evals-for-ai-agents/tool_calls_v3.png)
 
-|Version|Agent spec|EX|Adjusted Correctness|Mean tokens|Mean LLM calls|
+|Version|Agent spec|EX|Adjusted Correctness|Mean tokens|Mean tool calls|
 |---|---|---|---|---|---|
-|v1|2 tools: `run_query` and `get_sample_rows`|31%|84%|9,308|4.8|
-|v2|Add 3rd tool: `get_schema`|31%|82%|9,875|3.5|
-|v3|Schema in system prompt, remove `get_schema` tool|38%|80%|8,737|2.4|
+|v1|2 tools: `run_query` and `get_sample_rows`|31%|79%|9,308|4.8|
+|v2|Add 3rd tool: `get_schema`|31%|66%|9,875|3.5|
+|v3|Schema in system prompt, remove `get_schema` tool|38%|66%|8,737|2.4|
 
-**We improved our agent!** It's now more efficient while being as accurate.
+**We improved our agent!** It's now more efficient while being as accurate on strict execution match.
 * Avg tokens: down
 * Avg tool calls: down
-* Query correctness: about the same
-* First tool called is often run_query - and that's it
+* Query correctness: strict execution-match accuracy moved 31% -> 38%, but the more general judge-adjusted correctness changed 79% -> 66%
+* First tool called is often `run_query` - and that's the *only* tool called
 
 
 # Summary and next steps
