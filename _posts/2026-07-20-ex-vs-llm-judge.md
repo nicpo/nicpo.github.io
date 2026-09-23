@@ -21,7 +21,7 @@ In my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), a text-to-
 
 In my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), I built an eval for a text-to-SQL agent. One result stood out: strict execution accuracy (EX) was 38%, while the LLM-judge-adjusted score was 66%.
 
-![Breakdown from EX to judge verdicts](assets/ex-vs-llm-judge/ex-llm-example-counts.png)
+![Breakdown from EX to judge verdicts](/assets/ex-vs-llm-judge/ex-llm-example-counts.png)
 
 That is a large gap. So I went through the disagreement cases to understand what each grader was actually measuring. The lesson was not "EX is too strict" or "LLM judges are better". It was this:
 
