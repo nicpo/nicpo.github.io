@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "When Accuracy of 38% and 66% is Both Possible and Revealing"
+title: "When accuracy of 38% and 66% is both possible and revealing"
 ---
 
 # TLDR
