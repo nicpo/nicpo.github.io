@@ -1,13 +1,15 @@
 title: "Notes from Evals Country"
 tagline: "Data scientist, AI researcher, author"
 description: >
-  Working on AI agents, evaluation and what it takes to put them in production.
+  Nick Pogrebnyakov: Working on AI agents, evaluation and what it takes to put them in production.
   Author of Mass Automation (2025). PhD.
 url: "https://nicpo.github.io"
 
 theme: minima
 github_username: nicpo
 linkedin_username: pogrebnyakov
+book_url: "https://www.amazon.com/dp/B0FV2CMBF8/"
+book_title: "Mass Automation"
 
 # Navigation
 header_pages:

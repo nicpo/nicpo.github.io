@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "When accuracy of 38% and 66% is both possible and revealing"
+title: "Lessons from the mismatch between your deterministic grader and the LLM judge"
 ---
 
 # TLDR
@@ -10,7 +10,7 @@ In my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), a text-to-
 
 * **EX and LLM judge gap**: the two graders are testing different notions of correctness.
 * **EX can both miss real SQL bugs and reject valid answers.** The useful move is to inspect those disagreement buckets instead of averaging them away.
-* **Lesson for agent evals:** deterministic graders verify observable behavior; semantic graders test task success. Their disagreements are often the best debugging signal.
+* **What this means for agent evals:** deterministic graders verify observable behavior; semantic graders test task success. Their disagreements are often the best debugging signal.
 
 
 # Contents
@@ -19,15 +19,18 @@ In my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), a text-to-
 * TOC
 {:toc}
 
-In my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), I built an eval for a text-to-SQL agent. One result stood out: strict execution accuracy (EX) was 38%, while the LLM-judge-adjusted score was 66%.
+# A brief recap
+You created an eval set and your deterministic grader says "38% accuracy". You run it through the LLM judge and now it's at 66%. What now?
+
+That's what happened to me in my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), where I built an eval for a text-to-SQL agent. Strict execution accuracy (EX) was 38%, while the score adjusted after the LLM judge was 66%.
 
 ![Breakdown from EX to judge verdicts](/assets/ex-vs-llm-judge/ex-llm-example-counts.png)
 
-That is a large gap. So I went through the disagreement cases to understand what each grader was actually measuring. The lesson was not "EX is too strict" or "LLM judges are better". It was this:
+That is a large gap. So I went through the disagreement cases to understand what each grader was actually measuring. The lesson was:
 
-**When deterministic and semantic graders disagree, the disagreement is often the most interesting part of the eval.**
+**Deterministic checks test observable properties. Semantic graders assess behavior.** And like with many types of behavior, **what's desirable or good can be hard to define.**
 
-## A quick recap of the agent and graders
+## The agent and graders
 
 My agent is simple enough:
 
@@ -58,7 +61,7 @@ That lets us grade more than just the final prose.
 
 The two graders relevant here are **execution accuracy (EX)** and an **LLM judge**.
 
-### 1. Execution accuracy
+### Execution accuracy
 
 EX asks:
 
@@ -93,9 +96,52 @@ even if `governor` is harmless extra information.
 
 The alternative (deciding that only `province` and `annual_tribute` matter) requires understanding the question, which is exactly where the second grader comes in.
 
-### 2. LLM judge
+### LLM judge
 
-The LLM judge takes a different path depending on EX. If EX **fails**, it asks whether the agent SQL is nevertheless an acceptable answer to the question. If EX **passes**, it checks for false positives: cases where the result happens to match the gold result, but the SQL logic is still wrong.
+The LLM judge takes a different path depending on EX.
+
+![Possible EX and judge outputs](/assets/ex-vs-llm-judge/ex-llm-results-tree.png)
+
+If EX **fails**, it asks whether the agent SQL is nevertheless an acceptable answer to the question (`ACCEPTABLE`). If EX **passes**, it checks for false positives: cases where the result happens to match the gold result, but the SQL logic is still wrong.
+
+# The problem
+
+## Is accuracy 38% or 66%?
+
+The same agent scored 38% on strict EX and 66% on judge-adjusted correctness.That leaves a few questions:
+1. Which score to use for agent development?
+1. Which should I report to stakeholders?
+1. Why is the gap so large?
+1. Should I try to make it smaller?
+
+Spoiler alert. The answers are (1) use both, but in different ways; (2) report the composite; (3) see the rest of this post; (4) the gap might shrink as a result of (3), but it absolutely shouldn't be the goal: agreement alone tells you little.
+
+And just to clarify: 66% is already a composite, not a standalone LLM judge score. It combines execution results with the judge's decisions.
+
+
+## What could have happened?
+
+I dove in. After all, the disagreement could be caused by different things. For example:
+
+* **The measurement is wrong.** A comparator could reject equivalent numeric values, lose column positions, or mishandle duplicates. The score aggregation could also be wrong.
+
+* **The gold SQL is wrong.** The reference SQL expresses one answer. It may not be *the only* answer, not answer the question as stated (e.g. encode an unstated interpretation), need extra fields or contain a mistake.
+
+* **The graders were catching different things.** EX could miss a SQL bug that the current database doesn't expose. The judge could accept a valid alternative, overlook a real error, or reject correct SQL.
+
+These possibilities call for different fixes.
+
+
+## What I did to investigate
+
+I looked at the saved traces: the question, tool calls, SQL, returned rows, final answer and errors. To avoid rerunning the agent, I added replay code and replayed those traces through the grading pipeline. Doing this rather than running the whole thing fresh helped me check the effect of a change in the grader (that's what we want), rather than from getting a different answer from the judge or a new model version (what we don't want).
+
+I checked the EX + judge score aggregation, tightened the EX comparator, and reviewed the gold SQL. I focused on EX/judge disagreements in both directions:
+* **EX fail, judge accept:** was this a valid answer, an overly strict contract, bad gold, or a generous judge?
+* **EX pass, judge reject:** was there a real logical difference, or was the judge inventing a problem?
+
+
+# What I found
 
 ## What EX actually tells us
 
@@ -185,24 +231,25 @@ Whether that should fail is not really a SQL question. It is a decision about th
 
 That is where an LLM judge becomes useful. It can consider the question, schema, SQL, and results together instead of comparing two arrays. But it is not a proof of SQL equivalence. It is another evaluator, with different strengths and failure modes.
 
+# What this means
 ## Don’t average away the disagreement
 
 Once you have both kinds of graders, the obvious implementation is to use deterministic checks where possible and an LLM judge for cases that require interpretation.
 
-Useful, yes. Interesting, not really.
+Useful, yes. But not really interesting.
 
-The more useful lesson from my 38% versus 66% gap is to **preserve the disagreement categories instead of immediately collapsing them into one adjusted score**.
+The more useful lesson from my 38% vs. 66% gap is to **preserve the disagreement categories instead of immediately collapsing them into one adjusted score**.
 
-* Repeated **EX-pass / judge-reject** cases suggest missing counterexamples in your test data. Your fixture may simply be too friendly.
-* Repeated **EX-fail / judge-accept** cases point somewhere else: comparator policy, gold answers, or an output contract that may be stricter than the user-facing task.
+* Repeated **EX-pass / judge-reject** cases may suggest missing counterexamples in your test data.
+* Repeated **EX-fail / judge-accept** cases point somewhere else: comparator policy, gold answers or an output contract that may be stricter than the user-facing task.
 
-Those are different failure modes and they call for different fixes. So disagreement is not merely something to resolve before computing the final percentage. It is eval telemetry.
+Those are different failure modes and they call for different fixes. So disagreement is not merely something to resolve before computing the final percentage.
 
 ## This is not really about SQL
 
 SQL makes the gap between output agreement and semantic correctness easy enough to see: we can execute both candidates and compare their outputs. But the same pattern shows up in agent evals more broadly.
 
-A coding agent can pass every provided unit test while containing a bug in an untested branch. A browser agent can take exactly the expected sequence of actions and still fail the user's goal. Or it can take a completely different path and succeed.  A research agent can cite the expected sources while drawing the wrong conclusion—or use different sources and produce a well-supported answer.
+A coding agent can pass every provided unit test while containing a bug in an untested branch. A browser agent can take exactly the expected sequence of actions and still fail the user's goal. Or it can take a completely different path and succeed. A research agent can cite the expected sources while drawing the wrong conclusion, or use different sources and produce a well-supported answer.
 
 In each case, deterministic graders answer questions like:
 
@@ -233,4 +280,14 @@ The LLM judge asks something closer to:
 
 Those are different questions.
 
-For text-to-SQL—and for agent evals more broadly—the cases where they produce different answers are often more informative than either headline score on its own.
+For text-to-SQL, and for agent evals more broadly, the cases where they produce different answers are often more informative than either headline score on its own.
+
+## How to use this
+
+So, which score should you use for agent development? And which number to report to stakeholders? (Going back to the questions we raised earlier.)
+
+As my favorite book on measurement, *How to Measure Anything*, says, a metric should support a decision. Figure out what decision does this score support, and make that the main metric. For example:
+
+* Make **EX score** prominent if the workflow requires exact results, and you need to decide whether a new feature improves reliability enough to justify its added latency or cost
+* **Composite score** for decisions on whether task success is high enough to move into a limited pilot.
+* **Adjustment counts** (cases where the judge changes the EX verdict) to decide whether to spend the next sprint improving the agent or fixing the evaluation system

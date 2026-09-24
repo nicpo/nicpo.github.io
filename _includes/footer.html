@@ -16,6 +16,9 @@
 
       <div class="footer-col footer-col-2">
         {%- include social.html -%}
+        {%- if site.book_url -%}
+        <p><a href="{{ site.book_url }}">{{ site.book_title | escape }}</a></p>
+        {%- endif -%}
       </div>
 
       <div class="footer-col footer-col-3">
