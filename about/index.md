@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-![Nick Pogrebnyakov](/assets/about/photo.jpg){: style="max-width: 300px"}
+![Nick Pogrebnyakov](/assets/about/photo.jpg){: style="max-width: 150px"}
 
 Hey - I'm Nick Pogrebnyakov, an **AI researcher, ML engineer and data scientist**. I work across the full stack of AI and production ML: building evaluation infrastructure for AI tools at scale, deploying inference pipelines conforming to FDA regulations and NLP for legal and enterprise products. I've led AI teams, moved AI models from notebook to FDA-cleared production, and measured the revenue impact of what I build. Two US patents and an ACL publication came out of that work.
 
