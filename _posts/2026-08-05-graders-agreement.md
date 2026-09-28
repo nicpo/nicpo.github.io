@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "When the graders agree, ask what they didn't see"
+title: "When the graders agree, they may not have seen everything"
 ---
 
 # TLDR
@@ -57,7 +57,7 @@ The two expressions calculate different things:
 
 Before calling this mismatch a bug, I needed to check the domain rule and the approved query. Otherwise, a contrived or invalid row could make a sound query look wrong.
 
-<img src="/assets/wrong-graders-agreement/checks-diverge.png" alt="Where the deterministic and the judge checks diverged" style="max-width: 800px; width: 100%; height: auto;">
+<img src="/assets/2026-08-05-graders-agreement/checks-diverge.png" alt="Where the deterministic and the judge checks diverged" style="max-width: 800px; width: 100%; height: auto;">
 
 # How I found this case
 
@@ -69,7 +69,7 @@ That gave me 22 × 16 = **352** query-and-database comparisons. Eight comparison
 
 Finally, I sent those four candidates through the existing LLM judge, using the original question, schema, gold SQL, and agent SQL. The judge was not shown the changed rows or the counterexamples. It called three queries `FALSE_POSITIVE` (so they wouldn't pass the eval). It called the query discussed here `CORRECT` - meaning both EX and the judge ok'd it.
 
-<img src="/assets/wrong-graders-agreement/search-funnel.png" alt="Search funnel" style="max-width: 600px; width: 100%; height: auto;">
+<img src="/assets/2026-08-05-graders-agreement/search-funnel.png" alt="Search funnel" style="max-width: 400px; width: 100%; height: auto;">
 
 # Why did the judge accept it?
 
