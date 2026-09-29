@@ -70,12 +70,24 @@
 }
 
 .map-node {
+  display: block;
   padding: 0.45rem 0.8rem;
   border: 1px solid #828282;
   border-radius: 999px;
   background: #fff;
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+a.map-node {
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: 0 2px 6px rgba(42, 122, 226, 0.2);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
 }
 
 .map-node-primary {

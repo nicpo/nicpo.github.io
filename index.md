@@ -6,11 +6,11 @@ title: "Evaluating AI Agents"
 # Evaluating AI Agents: a text-to-SQL case study
 {: .no_toc}
 
-*I built an end-to-end evaluation system for a text-to-SQL agent, then used it as a testbed to investigate a harder question: how much can we trust an agent eval?*
+*I built an end-to-end evaluation system for a text-to-SQL agent, then used it to investigate eval graders, how much can we trust an agent eval?*
 
 ## The system
 
-<img src="/assets/root/system-diagram.png" alt="System diagram" style="max-width: 300px; width: 100%; height: auto;">
+<img src="/assets/root/system-diagram.png" alt="System diagram" style="display: block; max-width: 300px; width: 100%; height: auto; margin: 1.5rem auto;">
 
 The harness runs a hand-reviewed set of questions, saves each agent trace, grades what happened at several levels, and feeds the results back into the next agent version.
 
@@ -25,7 +25,7 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
 <figure class="project-map">
 <figcaption>Can we trust the eval?</figcaption>
 <div class="project-map-diagram">
-  <div class="map-node">Build eval</div>
+  <a class="map-node" href="{% post_url 2026-06-18-evals-for-ai-agents %}">Build eval</a>
   <div class="map-arrow" aria-hidden="true">↓</div>
   <div class="map-node map-node-primary">Agent</div>
   <div class="map-arrow" aria-hidden="true">↓</div>
@@ -37,18 +37,18 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
   <div class="map-node map-node-question">Do the verdicts agree?</div>
   <div class="map-branch-row">
     <div class="map-branch">
-      <div class="map-node map-node-disagree">Disagree</div>
+      <a class="map-node map-node-disagree" href="{% post_url 2026-07-10-graders-disagreement %}">Disagree</a>
       <p>Why? What does each measure?</p>
     </div>
     <div class="map-branch">
-      <div class="map-node map-node-agree">Agree</div>
+      <a class="map-node map-node-agree" href="{% post_url 2026-08-05-graders-agreement %}">Agree</a>
       <p>Are they both still wrong?</p>
     </div>
   </div>
   <div class="map-arrow" aria-hidden="true">↓</div>
-  <div class="map-node map-node-primary">Repeatability <span>Do results persist?</span></div>
+  <a class="map-node map-node-primary" href="{% post_url 2026-08-28-repeatability %}">Repeatability <span>Do results persist?</span></a>
   <div class="map-arrow" aria-hidden="true">↓</div>
-  <div class="map-node">Cost <span>Is the improvement worth it?</span></div>
+  <a class="map-node" href="{% post_url 2026-09-17-costs %}">Cost <span>Is the improvement worth it?</span></a>
 </div>
 </figure>
 
@@ -90,9 +90,9 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
   </a>
 </div>
 
-## What this project exercises
+## Keywords
 
-`Agent evaluation · experimental design · LLM-as-judge · SQL · Python · statistical analysis · failure analysis · inference economics`
+`agent evaluation · experimental design · LLM-as-judge · SQL · Python · statistical analysis · failure analysis · inference economics`
 
 ## Implementation
 
