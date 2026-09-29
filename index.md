@@ -10,10 +10,7 @@ title: "Evaluating AI Agents"
 
 ## The system
 
-<div class="diagram-placeholder" role="note">
-  <strong>System diagram placeholder</strong><br>
-  Project image to be added here: 61-question eval set → text-to-SQL agent → trace → deterministic graders + LLM judge → evaluation → agent iteration.
-</div>
+<img src="/assets/root/system-diagram.png" alt="System diagram" style="max-width: 500px; width: 100%; height: auto;">
 
 The harness runs a hand-reviewed set of questions, saves each agent trace, grades what happened at several levels, and feeds the results back into the next agent version.
 
@@ -27,28 +24,32 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
 
 <figure class="project-map">
 <figcaption>Can we trust the eval?</figcaption>
-<pre>                         Build eval
-                             │
-                             ▼
-             ┌── deterministic graders
-Agent ───────┤
-             └── LLM judge
-                             │
-                ┌────────────┴────────────┐
-                ▼                         ▼
-           DISAGREE                    AGREE
-                │                         │
-          Why? What does            Are they both
-          each measure?             still wrong?
-                │                         │
-                └────────────┬────────────┘
-                             ▼
-                       REPEATABILITY
-                   Do results persist?
-                             │
-                             ▼
-                           COST
-                 Is the improvement worth it?</pre>
+<div class="project-map-diagram">
+  <div class="map-node">Build eval</div>
+  <div class="map-arrow" aria-hidden="true">↓</div>
+  <div class="map-node map-node-primary">Agent</div>
+  <div class="map-arrow" aria-hidden="true">↓</div>
+  <div class="map-grader-row">
+    <div class="map-node">Deterministic graders</div>
+    <div class="map-node">LLM judge</div>
+  </div>
+  <div class="map-arrow" aria-hidden="true">↓</div>
+  <div class="map-node map-node-question">Do the verdicts agree?</div>
+  <div class="map-branch-row">
+    <div class="map-branch">
+      <div class="map-node map-node-disagree">Disagree</div>
+      <p>Why? What does each measure?</p>
+    </div>
+    <div class="map-branch">
+      <div class="map-node map-node-agree">Agree</div>
+      <p>Are they both still wrong?</p>
+    </div>
+  </div>
+  <div class="map-arrow" aria-hidden="true">↓</div>
+  <div class="map-node map-node-primary">Repeatability <span>Do results persist?</span></div>
+  <div class="map-arrow" aria-hidden="true">↓</div>
+  <div class="map-node">Cost <span>Is the improvement worth it?</span></div>
+</div>
 </figure>
 
 ## Selected findings
@@ -62,31 +63,31 @@ Agent ───────┤
 ## Experiments
 
 <div class="experiment-cards">
-  <section class="experiment-card">
+  <a class="experiment-card" href="{% post_url 2026-06-18-evals-for-ai-agents %}">
     <h3>1. Build the eval</h3>
     <p>Build the harness, a 61-question eval set, trace capture, and a layered grading system for a text-to-SQL agent.</p>
-    <p><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building and scaling evals for AI agents</a></p>
-  </section>
-  <section class="experiment-card">
+    <p>Read: Building and scaling evals for AI agents →</p>
+  </a>
+  <a class="experiment-card" href="{% post_url 2026-07-10-graders-disagreement %}">
     <h3>2. Investigate disagreement</h3>
     <p>Use the gap between execution accuracy and an LLM judge to find out what each measure actually observes.</p>
-    <p><a href="{% post_url 2026-07-10-graders-disagreement %}">Lessons from the mismatch between your deterministic grader and the LLM judge</a></p>
-  </section>
-  <section class="experiment-card">
+    <p>Read: Lessons from the mismatch between your deterministic grader and the LLM judge →</p>
+  </a>
+  <a class="experiment-card" href="{% post_url 2026-08-05-graders-agreement %}">
     <h3>3. Test agreement</h3>
     <p>Probe accepted SQL against valid changes to the database—and find a failure both graders missed.</p>
-    <p><a href="{% post_url 2026-08-05-graders-agreement %}">When the graders agree, they may not have seen everything</a></p>
-  </section>
-  <section class="experiment-card">
+    <p>Read: When the graders agree, they may not have seen everything →</p>
+  </a>
+  <a class="experiment-card" href="{% post_url 2026-08-28-repeatability %}">
     <h3>4. Measure repeatability</h3>
     <p>Repeat the full eval to separate a durable quality difference from one-run noise and hidden model variation.</p>
-    <p><a href="{% post_url 2026-08-28-repeatability %}">Measuring agent reliability with repeated evals</a></p>
-  </section>
-  <section class="experiment-card">
+    <p>Read: Measuring agent reliability with repeated evals →</p>
+  </a>
+  <a class="experiment-card" href="{% post_url 2026-09-17-costs %}">
     <h3>5. Account for cost</h3>
     <p>Measure calls, tokens, and price together to test whether a simpler architecture is actually cheaper.</p>
-    <p><a href="{% post_url 2026-09-17-costs %}">Fewer agent steps do not mean proportionally lower cost</a></p>
-  </section>
+    <p>Read: Fewer agent steps do not mean proportionally lower cost →</p>
+  </a>
 </div>
 
 ## What this project exercises

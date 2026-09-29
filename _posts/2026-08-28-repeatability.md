@@ -20,7 +20,7 @@ Experiment code: [exp_03_repeatability_costs](https://github.com/nicpo/ai-agent-
     <li><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building the eval system</a></li>
     <li><a href="{% post_url 2026-07-10-graders-disagreement %}">Grader disagreement</a></li>
     <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
-    <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
+    <li aria-current="page">Repeatability</li>
     <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
   </ol>
 </nav>

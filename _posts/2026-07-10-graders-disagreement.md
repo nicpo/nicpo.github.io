@@ -18,7 +18,7 @@ Experiment code: [exp_01_graders_disagreement](https://github.com/nicpo/ai-agent
   <p><strong>Part of: <a href="/">Evaluating AI Agents</a></strong></p>
   <ol>
     <li><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building the eval system</a></li>
-    <li><a href="{% post_url 2026-07-10-graders-disagreement %}">Grader disagreement</a></li>
+    <li aria-current="page">Grader disagreement</li>
     <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
     <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
     <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>

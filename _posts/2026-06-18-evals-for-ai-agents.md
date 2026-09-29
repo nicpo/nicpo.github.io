@@ -19,7 +19,7 @@ Good if you've decided to build evals and need an end-to-end guide.
 <nav class="series-navigation" aria-label="AI agent evaluation series">
   <p><strong>Part of: <a href="/">Evaluating AI Agents</a></strong></p>
   <ol>
-    <li><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building the eval system</a></li>
+    <li aria-current="page">Building the eval system</li>
     <li><a href="{% post_url 2026-07-10-graders-disagreement %}">Grader disagreement</a></li>
     <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
     <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
