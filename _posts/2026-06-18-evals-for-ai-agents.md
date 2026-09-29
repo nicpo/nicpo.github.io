@@ -16,6 +16,17 @@ Good if you've decided to build evals and need an end-to-end guide.
 
 **Code**: [https://github.com/nicpo/ai-agent-evals](https://github.com/nicpo/ai-agent-evals)
 
+<nav class="series-navigation" aria-label="AI agent evaluation series">
+  <p><strong>Part of: <a href="/">Evaluating AI Agents</a></strong></p>
+  <ol>
+    <li><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building the eval system</a></li>
+    <li><a href="{% post_url 2026-07-10-graders-disagreement %}">Grader disagreement</a></li>
+    <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
+    <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
+    <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
+  </ol>
+</nav>
+
 # Contents
 {: .no_toc}
 * TOC
@@ -352,3 +363,8 @@ Kim et al. (2025). "FLEX: Expert-level False-Less EXecution Metric for Text-to-S
 Lei et al. (2024). "Spider 2.0: Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows", [https://arxiv.org/abs/2411.07763](https://arxiv.org/abs/2411.07763)
 
 Yu et al. (2018). "Spider: A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Semantic Parsing and Text-to-SQL Task", [https://arxiv.org/abs/1809.08887](https://arxiv.org/abs/1809.08887)
+
+<nav class="series-pagination" aria-label="AI agent evaluation series navigation">
+  <a href="{% post_url 2026-07-10-graders-disagreement %}">Next: Grader disagreement →</a>
+  <a href="/">All experiments →</a>
+</nav>

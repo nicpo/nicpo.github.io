@@ -13,6 +13,17 @@ title: "When the graders agree, they may not have seen everything"
 
 Experiment code: [exp_02_graders_agreement](https://github.com/nicpo/ai-agent-evals/tree/main/experiments/exp_02_graders_agreement)
 
+<nav class="series-navigation" aria-label="AI agent evaluation series">
+  <p><strong>Part of: <a href="/">Evaluating AI Agents</a></strong></p>
+  <ol>
+    <li><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building the eval system</a></li>
+    <li><a href="{% post_url 2026-07-10-graders-disagreement %}">Grader disagreement</a></li>
+    <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
+    <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
+    <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
+  </ol>
+</nav>
+
 * TOC
 {:toc}
 
@@ -103,3 +114,9 @@ In this run, a real agent query passed EX on the original database and received 
 The lesson I’m taking to other evals is to inspect some double passes for assumptions both checks may have left untouched.
 
 Agreement is valuable. Understanding its limits makes it more useful.
+
+<nav class="series-pagination" aria-label="AI agent evaluation series navigation">
+  <a href="{% post_url 2026-07-10-graders-disagreement %}">← Previous: Grader disagreement</a>
+  <a href="{% post_url 2026-08-28-repeatability %}">Next: Repeatability →</a>
+  <a href="/">All experiments →</a>
+</nav>

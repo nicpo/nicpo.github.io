@@ -14,6 +14,17 @@ In my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), a text-to-
 
 Experiment code: [exp_01_graders_disagreement](https://github.com/nicpo/ai-agent-evals/tree/main/experiments/exp_01_graders_disagreement)
 
+<nav class="series-navigation" aria-label="AI agent evaluation series">
+  <p><strong>Part of: <a href="/">Evaluating AI Agents</a></strong></p>
+  <ol>
+    <li><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building the eval system</a></li>
+    <li><a href="{% post_url 2026-07-10-graders-disagreement %}">Grader disagreement</a></li>
+    <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
+    <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
+    <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
+  </ol>
+</nav>
+
 # Contents
 {: .no_toc}
 
@@ -292,3 +303,9 @@ As my favorite book on measurement, *How to Measure Anything*, says, a metric sh
 * Make **EX score** prominent if the workflow requires exact results, and you need to decide whether a new feature improves reliability enough to justify its added latency or cost
 * **Composite score** for decisions on whether task success is high enough to move into a limited pilot.
 * **Adjustment counts** (cases where the judge changes the EX verdict) to decide whether to spend the next sprint improving the agent or fixing the evaluation system
+
+<nav class="series-pagination" aria-label="AI agent evaluation series navigation">
+  <a href="{% post_url 2026-06-18-evals-for-ai-agents %}">← Previous: Building the eval system</a>
+  <a href="{% post_url 2026-08-05-graders-agreement %}">Next: When graders agree →</a>
+  <a href="/">All experiments →</a>
+</nav>

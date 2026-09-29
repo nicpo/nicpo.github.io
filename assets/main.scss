@@ -34,3 +34,80 @@
   h2:not(.no_toc)::before { content: counter(h1) "." counter(h2) ". "; }
   h3:not(.no_toc)::before { content: counter(h1) "." counter(h2) "." counter(h3) ". "; }
 }
+
+.diagram-placeholder {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border: 2px dashed #828282;
+  border-radius: 4px;
+  color: #4a4a4a;
+  text-align: center;
+}
+
+.project-map {
+  margin: 2rem 0;
+  text-align: center;
+
+  figcaption {
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  pre {
+    display: inline-block;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 1rem;
+    text-align: left;
+    white-space: pre;
+  }
+}
+
+.experiment-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.experiment-card {
+  padding: 1rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.series-navigation,
+.series-pagination {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid #828282;
+  background: #f8f8f8;
+  font-size: 0.9rem;
+}
+
+.series-navigation {
+  p {
+    margin: 0 0 0.5rem;
+  }
+
+  ol {
+    margin: 0;
+  }
+}
+
+.series-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}

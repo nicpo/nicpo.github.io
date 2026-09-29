@@ -13,6 +13,7 @@ book_title: "Mass Automation"
 
 # Navigation
 header_pages:
+  - blog/index.md
   - about/index.md
 
 permalink: /:year/:month/:day/:title/

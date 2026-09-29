@@ -14,6 +14,17 @@ title: "Measuring agent reliability with repeated evals"
 
 Experiment code: [exp_03_repeatability_costs](https://github.com/nicpo/ai-agent-evals/tree/main/experiments/exp_03_repeatability_costs)
 
+<nav class="series-navigation" aria-label="AI agent evaluation series">
+  <p><strong>Part of: <a href="/">Evaluating AI Agents</a></strong></p>
+  <ol>
+    <li><a href="{% post_url 2026-06-18-evals-for-ai-agents %}">Building the eval system</a></li>
+    <li><a href="{% post_url 2026-07-10-graders-disagreement %}">Grader disagreement</a></li>
+    <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
+    <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
+    <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
+  </ol>
+</nav>
+
 * TOC
 {:toc}
 
@@ -223,3 +234,9 @@ The broader lesson is about **context strategy**. Loading high-value context upf
 **Break the average down before calling a change neutral.** Here, +7 points came from 36 wins and 24 losses in different parts of the eval set. A change that helps hard cases and hurts easy ones can look like a modest win overall.
 
 **None of this is specific to SQL.** A coding agent, a support bot or a research agent faces the same questions. Does it give the same answer twice? Does your grader? Does "better on average" mean better everywhere? And the context trade-off carries over too: a schema, an API spec or a style guide in the prompt saves exploration when it's small and stable, and gets in the way when it isn't.
+
+<nav class="series-pagination" aria-label="AI agent evaluation series navigation">
+  <a href="{% post_url 2026-08-05-graders-agreement %}">← Previous: When graders agree</a>
+  <a href="{% post_url 2026-09-17-costs %}">Next: Cost →</a>
+  <a href="/">All experiments →</a>
+</nav>
