@@ -6,7 +6,7 @@ title: "Evaluating AI Agents"
 # Evaluating AI Agents: a text-to-SQL case study
 {: .no_toc}
 
-*I built an end-to-end evaluation system for a text-to-SQL agent, then used it to investigate eval graders, how much can we trust an agent eval?*
+*I built an end-to-end evaluation system for a text-to-SQL agent, then used it to investigate disagreement and agreement between eval graders, repeatability and cost of running the agent, harness and evaluation*
 
 ## The system
 
@@ -55,10 +55,10 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
 ## Selected findings
 
 - 61 hand-reviewed evaluation questions, spanning four difficulty levels.
-- 5 grader layers, combining deterministic checks with LLM judgment.
-- 352 counterfactual query-and-database comparisons exposed failures that an original-data evaluation could not see.
-- 549 repeated agent runs changed the ranking of three agent versions, despite temperature 0.
-- **49% fewer LLM calls** translated to only an estimated **11% lower inference cost**. That cost reduction is uncertain: the 95% interval ranges from a **$3.04 saving to a $0.53 increase per 1,000 attempts**.
+- <a href="{% post_url 2026-06-18-evals-for-ai-agents %}">5 grader layers</a>, combining deterministic checks with LLM judgment.
+- 352 <a href="{% post_url 2026-08-05-graders-agreement %}">counterfactual</a> query-and-database comparisons exposed failures that an original-data evaluation could not see.
+- 549 <a href="{% post_url 2026-08-28-repeatability %}">repeated agent runs</a> changed the ranking of three agent versions, despite temperature 0.
+- 49% fewer LLM calls translated to only an estimated 11% lower <a href="{% post_url 2026-09-17-costs %}">inference cost</a>.
 
 ## Experiments
 
