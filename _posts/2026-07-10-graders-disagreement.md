@@ -12,6 +12,7 @@ In my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), a text-to-
 * **EX can both miss real SQL bugs and reject valid answers.** The useful move is to inspect those disagreement buckets instead of averaging them away.
 * **What this means for agent evals:** deterministic graders verify observable behavior; semantic graders test task success. Their disagreements are often the best debugging signal.
 
+Experiment code: [exp_01_graders_disagreement](https://github.com/nicpo/ai-agent-evals/tree/main/experiments/exp_01_graders_disagreement)
 
 # Contents
 {: .no_toc}

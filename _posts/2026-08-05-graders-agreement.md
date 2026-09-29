@@ -11,6 +11,8 @@ title: "When the graders agree, they may not have seen everything"
 - One query both passed the deterministic grader and received a `CORRECT` judge verdict, yet a valid database change exposed a wrong result.
 - The learning is to inspect some cases where graders agree. Ask critically what each check actually observed and what legitimate case could make an accepted output fail.
 
+Experiment code: [exp_02_graders_agreement](https://github.com/nicpo/ai-agent-evals/tree/main/experiments/exp_02_graders_agreement)
+
 * TOC
 {:toc}
 

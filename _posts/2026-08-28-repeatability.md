@@ -12,6 +12,8 @@ title: "Measuring agent reliability with repeated evals"
 - Most questions weren't coin flips passed 3/3 or failed 0/3, so retries recovered almost nothing.
 - But the average improvement hid a reshuffle: prompt v3 gained on medium and hard questions and lost on easy ones.
 
+Experiment code: [exp_03_repeatability_costs](https://github.com/nicpo/ai-agent-evals/tree/main/experiments/exp_03_repeatability_costs)
+
 * TOC
 {:toc}
 
@@ -104,7 +106,7 @@ The three numbers sit close together because most questions don't wobble. For v3
 
 The overall pattern is visible in this picture:
 
-<img src="/assets/2026-08-28-repeatability/correctness-by-difficulty-heatmap.png" alt="Adjusted correctness by difficulty and agent version" style="max-width: 1000px; width: 100%; height: auto;">
+<img src="/assets/2026-08-28-repeatability/correctness-by-difficulty-heatmap.png" alt="Adjusted correctness by difficulty and agent version" style="max-width: 700px; width: 100%; height: auto;">
 
 # Variance in agent and grader output across runs
 
