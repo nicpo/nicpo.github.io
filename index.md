@@ -10,7 +10,7 @@ title: "Evaluating AI Agents"
 
 ## The system
 
-<img src="/assets/root/system-diagram.png" alt="System diagram" style="max-width: 500px; width: 100%; height: auto;">
+<img src="/assets/root/system-diagram.png" alt="System diagram" style="max-width: 300px; width: 100%; height: auto;">
 
 The harness runs a hand-reviewed set of questions, saves each agent trace, grades what happened at several levels, and feeds the results back into the next agent version.
 
