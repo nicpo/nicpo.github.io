@@ -122,6 +122,13 @@ a.map-node {
   line-height: 1;
 }
 
+.map-note {
+  max-width: 420px;
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
 .map-grader-row,
 .map-branch-row {
   display: grid;

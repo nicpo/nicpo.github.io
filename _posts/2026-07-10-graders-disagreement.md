@@ -22,6 +22,7 @@ Experiment code: [exp_01_graders_disagreement](https://github.com/nicpo/ai-agent
     <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
     <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
     <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
+    <li><a href="{% post_url 2026-09-30-jev %}">Typed judge</a></li>
   </ol>
 </nav>
 

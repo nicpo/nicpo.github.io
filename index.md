@@ -6,7 +6,7 @@ title: "Evaluating AI Agents"
 # Evaluating AI Agents: a text-to-SQL case study
 {: .no_toc}
 
-*I built an end-to-end evaluation system for a text-to-SQL agent, then used it to investigate disagreement and agreement between eval graders, repeatability and cost of running the agent, harness and evaluation*
+*I built an end-to-end evaluation system for a text-to-SQL agent, then used it to investigate disagreement and agreement between eval graders, repeatability, cost of running the agent, harness and evaluation, and whether a cheaper judge can replace the LLM judge*
 
 ## The system
 
@@ -21,6 +21,7 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
 3. How both graders can miss the same failure
 4. How repeated runs change conclusions about agent quality
 5. How architecture changes affect inference cost
+6. Whether a typed, non-reasoning model can replace the LLM judge
 
 <figure class="project-map">
 <figcaption>Can we trust the eval?</figcaption>
@@ -49,6 +50,8 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
   <a class="map-node map-node-primary" href="{% post_url 2026-08-28-repeatability %}">Repeatability <span>Do results persist?</span></a>
   <div class="map-arrow" aria-hidden="true">↓</div>
   <a class="map-node" href="{% post_url 2026-09-17-costs %}">Cost <span>Is the improvement worth it?</span></a>
+  <div class="map-arrow" aria-hidden="true">↓</div>
+  <a class="map-node" href="{% post_url 2026-09-30-jev %}">Typed judge <span>Can a cheaper judge do the job?</span></a>
 </div>
 </figure>
 
@@ -59,6 +62,7 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
 - 352 <a href="{% post_url 2026-08-05-graders-agreement %}">counterfactual</a> query-and-database comparisons exposed failures that an original-data evaluation could not see.
 - 549 <a href="{% post_url 2026-08-28-repeatability %}">repeated agent runs</a> changed the ranking of three agent versions, despite temperature 0.
 - 49% fewer LLM calls translated to only an estimated 11% lower <a href="{% post_url 2026-09-17-costs %}">inference cost</a>.
+- The <a href="{% post_url 2026-09-30-jev %}">Jev model</a> as a judge was 89.3% accurate against 94.9% for a reasoning model, at about 1/60 of the cost and 1/20 of the latency. As a first pass with low-confidence cases sent on to the reasoning model, it matched its accuracy at about 60% of the cost and latency.
 
 ## Experiments
 
@@ -87,6 +91,11 @@ The harness runs a hand-reviewed set of questions, saves each agent trace, grade
     <h3>5. Account for cost</h3>
     <p>Measure calls, tokens, and price together to test whether a simpler architecture is actually cheaper.</p>
     <p>Read: Fewer agent steps do not mean proportionally lower cost →</p>
+  </a>
+  <a class="experiment-card" href="{% post_url 2026-09-30-jev %}">
+    <h3>6. Try a typed judge</h3>
+    <p>Replace the reasoning LLM judge with Jev, a model that returns a typed choice and probabilities, and check accuracy, error direction, cost and latency against human labels.</p>
+    <p>Read: Jev as an LLM judge →</p>
   </a>
 </div>
 

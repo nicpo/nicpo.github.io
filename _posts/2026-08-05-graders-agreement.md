@@ -21,8 +21,12 @@ Experiment code: [exp_02_graders_agreement](https://github.com/nicpo/ai-agent-ev
     <li aria-current="page">When graders agree</li>
     <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
     <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
+    <li><a href="{% post_url 2026-09-30-jev %}">Typed judge</a></li>
   </ol>
 </nav>
+
+# Contents
+{: .no_toc}
 
 * TOC
 {:toc}
@@ -37,7 +41,7 @@ Two checks matter here:
 - **Execution accuracy (EX)** runs the agent’s SQL and the gold SQL on the database and compares their results.
 - **The false-positive LLM judge** reviews an EX pass. Its job is to spot SQL that got matching results for the wrong reason.
 
-In an [earlier post](https://nicpo.github.io/2026/07/20/ex-vs-llm-judge), I looked at cases where EX and the judge disagreed. This time I looked at *agreement*. The agent ran on the original database, EX passed, and the judge said `CORRECT`. But the agent's SQL was wrong: when the database was slightly changed (while still keeping the schema valid), the query returned a wrong result.
+In an <a href="{% post_url 2026-07-10-graders-disagreement %}">earlier post</a>, I looked at cases where EX and the judge disagreed. This time I looked at *agreement*. The agent ran on the original database, EX passed, and the judge said `CORRECT`. But the agent's SQL was wrong: when the database was slightly changed (while still keeping the schema valid), the query returned a wrong result.
 
 
 # What the original data didn't show

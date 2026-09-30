@@ -22,8 +22,12 @@ Experiment code: [exp_03_repeatability_costs](https://github.com/nicpo/ai-agent-
     <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
     <li aria-current="page">Repeatability</li>
     <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
+    <li><a href="{% post_url 2026-09-30-jev %}">Typed judge</a></li>
   </ol>
 </nav>
+
+# Contents
+{: .no_toc}
 
 * TOC
 {:toc}
@@ -54,7 +58,7 @@ The idea behind v3 was that if the agent already has the schema, it shouldn't ne
 
 That's 66% fewer tool calls and 49% fewer LLM calls than v1. Tokens and cost are less clear: v3 is clearly cheaper than v2, but the difference from v1 could still be noise.
 
-The open question was quality. After I fixed the scoring formula in my [second post](https://nicpo.github.io/2026/07/20/ex-vs-llm-judge), the single run said v3 paid for its efficiency: it got 67% of questions right, against 80% for v1. But that was one run per question, so I ran the whole thing again, three times over:
+The open question was quality. After I fixed the scoring formula in my <a href="{% post_url 2026-07-10-graders-disagreement %}">second post</a>, the single run said v3 paid for its efficiency: it got 67% of questions right, against 80% for v1. But that was one run per question, so I ran the whole thing again, three times over:
 
 ```text
 61 questions x 3 versions x 3 runs = 549 attempts
