@@ -117,17 +117,17 @@ Which number matters depends on how the agent is deployed:
 
 The three numbers sit close together because most questions don't wobble. For v3, 44 questions passed 3/3, 10 failed 0/3, and only 7 landed in between. Most questions aren't coin flips, that's why retries barely helped.
 
-<img src="/assets/2026-08-28-repeatability/per-question-reliability.png" alt="Per-question reliability by agent version" style="max-width: 800px; width: 100%; height: auto;">
+<img src="/assets/2026-08-28-repeatability/per-question-reliability.png" alt="Per-question reliability by agent version" style="max-width: 600px; width: 100%; height: auto;">
 
 The overall pattern is visible in this picture:
 
-<img src="/assets/2026-08-28-repeatability/correctness-by-difficulty-heatmap.png" alt="Adjusted correctness by difficulty and agent version" style="max-width: 700px; width: 100%; height: auto;">
+<img src="/assets/2026-08-28-repeatability/correctness-by-difficulty-heatmap.png" alt="Adjusted correctness by difficulty and agent version" style="max-width: 600px; width: 100%; height: auto;">
 
 # Variance in agent and grader output across runs
 
 A score comes out of a pipeline with two moving parts: the agent writes SQL, then the judge grades it. Either can vary.
 
-<img src="/assets/2026-08-28-repeatability/sources-of-variability.png" alt="Adjusted correctness by difficulty and agent version" style="max-width: 1000px; width: 100%; height: auto;">
+<img src="/assets/2026-08-28-repeatability/sources-of-variability.png" alt="Adjusted correctness by difficulty and agent version" style="max-width: 700px; width: 100%; height: auto;">
 
 ## The agent
 
@@ -200,7 +200,7 @@ Knowing the schema didn't help it read the question correctly.
 
 Here's the quality difference between v1 and v3 by difficulty. The dot = v3 - v1. Line = 95% range (if the line crosses zero, the difference could be noise).
 
-<img src="/assets/2026-08-28-repeatability/v3-v1-quality-differences-by-difficulty.png" alt="v3-v1 quality differences by difficulty" style="max-width: 1000px; width: 100%; height: auto;">
+<img src="/assets/2026-08-28-repeatability/v3-v1-quality-differences-by-difficulty.png" alt="v3-v1 quality differences by difficulty" style="max-width: 600px; width: 100%; height: auto;">
 
 ## Tool call limits
 

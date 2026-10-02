@@ -37,7 +37,7 @@ You created an eval set and your deterministic grader says "38% accuracy". You r
 
 That's what happened to me in my [previous post]({% post_url 2026-06-18-evals-for-ai-agents %}), where I built an eval for a text-to-SQL agent. Strict execution accuracy (EX) was 38%, while the score adjusted after the LLM judge was 66%.
 
-![Breakdown from EX to judge verdicts](/assets/2026-07-10-graders-disagreement/ex-llm-example-counts.png)
+<img src="/assets/2026-07-10-graders-disagreement/ex-llm-example-counts.png" alt="Breakdown from EX to judge verdicts" style="max-width: 700px; width: 100%; height: auto;">
 
 That is a large gap. So I went through the disagreement cases to understand what each grader was actually measuring. The lesson was:
 
@@ -113,7 +113,7 @@ The alternative (deciding that only `province` and `annual_tribute` matter) requ
 
 The LLM judge takes a different path depending on EX.
 
-![Possible EX and judge outputs](/assets/2026-07-10-graders-disagreement/ex-llm-results-tree.png)
+<img src="/assets/2026-07-10-graders-disagreement/ex-llm-results-tree.png" alt="Possible EX and judge outputs" style="max-width: 600px; width: 100%; height: auto;">
 
 If EX **fails**, it asks whether the agent SQL is nevertheless an acceptable answer to the question (`ACCEPTABLE`). If EX **passes**, it checks for false positives: cases where the result happens to match the gold result, but the SQL logic is still wrong.
 
