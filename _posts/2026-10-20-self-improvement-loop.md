@@ -20,7 +20,7 @@ Experiment code: [exp_05_self_improvement_loop](https://github.com/nicpo/ai-agen
     <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
     <li><a href="{% post_url 2026-08-28-repeatability %}">Repeatability</a></li>
     <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
-    <li><a href="{% post_url 2026-09-30-jev %}">Typed judge</a></li>
+    <li><a href="{% post_url 2026-09-30-jev %}">Typed judge (Jev)</a></li>
     <li aria-current="page">Self-improvement loop</li>
   </ol>
 </nav>
@@ -35,14 +35,16 @@ Experiment code: [exp_05_self_improvement_loop](https://github.com/nicpo/ai-agen
 
 Self-improvement loops are everywhere now. They update what the agent reads: the prompt, the tool descriptions, its skills. One model reads the agent's failures and proposes a fix, and the fix stays if the score goes up. Whether that makes agents better, or just better at the eval, is still an open question.
 
-I wanted to try it on [my agent]({% post_url 2026-06-18-evals-for-ai-agents %}), which answers questions about a small Roman Empire database by writing SQL. The post involves 4 models:
+I wanted to try it on [my agent]({% post_url 2026-06-18-evals-for-ai-agents %}), which answers questions about a small Roman Empire database by writing SQL.
+
+In this post we have 4 models:
 
 - **The agent** is a fast and cheap model (Anthropic's Claude Haiku 5.5). It writes SQL using 2 tools, `run_query` and `get_sample_rows`.
 - **The loop judge** is a frontier reasoning model from another lab (OpenAI's GPT-6.1 Sol). It decides whether each answer is right, with a reference query as a guide. Its verdicts decide which edits the loop keeps.
 - **The proposer** is a more capable model than the agent (Anthropic's Claude Sonnet 5.5). It reads the agent's failures and proposes edits.
 - **The second judge** is an open-weights reasoning model from a third lab (Moonshot AI's Kimi K2 Thinking). It regrades answers after the loop, as a check on the loop judge.
 
-The catch is that a loop doesn't optimize your agent. It optimizes a *score*. As a recent production report on these loops [puts it](https://arxiv.org/abs/2609.02246), "an optimizer converges to the decision boundary of whatever grades it, not to the boundary of the task". So the gain needs checking somewhere the loop can't reach.
+The catch is that a loop doesn't optimize your agent. It optimizes a *score*. As a recent production report on these loops puts it ([Wahi, 2026](https://arxiv.org/abs/2609.02246)), "an optimizer converges to the decision boundary of whatever grades it, not to the boundary of the task". So the gain needs checking somewhere the loop can't reach.
 
 # First, check what your harness grades
 
@@ -62,7 +64,7 @@ That line is a workaround. It doesn't stop the agent from checking its work. It 
 # The loop
 
 <figure class="project-map">
-<figcaption>Flowchart: one round of the loop, and the checks used once after it</figcaption>
+<figcaption>One round of the self-improvement loop, and the checks after it</figcaption>
 <div class="project-map-diagram">
   <div class="map-node map-node-primary">Current best prompt <span>plus 4 failed dev answers and the loop judge's reasoning</span></div>
   <div class="map-arrow" aria-hidden="true">↓</div>
@@ -90,7 +92,7 @@ That line is a workaround. It doesn't stop the agent from checking its work. It 
 
 My 61 existing questions are split in 2. The proposer sees failures from 30 dev questions, along with the loop judge's written reasoning. The other 31 validation questions decide which edits stay, and the proposer never sees them. A verdict like "the join drops officials with no records" tells it far more than "fail". That's the core idea of [GEPA](https://arxiv.org/abs/2507.19457), and the reason it can beat RL with far fewer runs.
 
-That much detail has a downside: the easiest fix for a failed question is to write its answer into the prompt. So 2 checks run before an edit is evaluated. A lint rejects edits that smuggle in answers (a question id, a province name, a chunk of reference SQL). A 3,500-character cap stops the prompt from turning into a pile of patches, one per failure. 10 proposals cost $11.60.
+That much detail has a downside: the easiest fix for a failed question is to write its answer into the prompt. So two checks run before an edit is evaluated. A lint rejects edits that smuggle in answers (a question id, a province name, a chunk of reference SQL). A 3,500-character cap stops the prompt from turning into a pile of patches, one per failure. 10 proposals cost $11.60.
 
 # What the loop changed
 
@@ -102,15 +104,15 @@ The loop kept 2 edits. Between them they added 3 rules, all about how the agent 
 
 None of them is something I'd have written on day one. All are obvious in hindsight, which is roughly what you want from a loop.
 
-# The loop stopped at 2
+# The loop's productive and unproductive iterations
 
-The other 8 proposals all failed the keep rule (2 also lost too much on dev). The current best prompt didn't change, so every round got the *same 4* failed questions. The proposer itself labeled 2 of them judge strictness, e.g. a rounding objection that "the reference SQL has the same weakness". A third was the agent running a sanity check after its answer query, the habit my hand fix was meant to stop. 6 proposals tried to address that from other angles: a hard rule, an audit step before finishing etc. None produced a gain bigger than the noise: rerunning the unchanged starting prompt moved the validation score by 6.5 points on its own, more than my 5-point keep bar. By round 9 the proposer noted that "proposals 3-8 already tried to enforce 'answer query last', and none helped".
+The other 8 proposals all failed the keep rule (two also lost too much on dev). The current best prompt didn't change, so every round got the *same 4* failed questions. The proposer itself labeled two of them judge strictness, e.g. a rounding objection that "the reference SQL has the same weakness". A third was the agent running a sanity check after its answer query, the habit my hand fix was meant to stop. 6 proposals tried to address that from other angles: a hard rule, an audit step before finishing etc. None produced a gain bigger than the noise: rerunning the unchanged starting prompt moved the validation score by 6.5 points on its own, more than my 5-point keep bar. By round 9 the proposer noted that "proposals 3-8 already tried to enforce 'answer query last', and none helped".
 
 My read: the loop found the useful changes early. After that, it kept rewriting the prompt to fix failures that no prompt could fix. I didn't test the alternatives, but the next steps seem clear: resample failures each round, let the proposer drop ones it flags as judge strictness and move a failure that survives several prompt edits into the harness or a tool.
 
-# 3 questions about the gain
+# Three questions about the gain
 
-Back to the catch from the start: the loop optimized a score, so the gain needs checking somewhere the loop couldn't reach.
+Back to the catch from the start: the loop optimizes a score, so the gain needs checking somewhere the loop couldn't reach.
 
 ## Does it hold on fresh questions?
 
@@ -120,14 +122,14 @@ Before the loop, I prepared 24 new questions (8 families of related variants), l
 |---|---:|---:|
 | Original | 56.7% | 55.8% |
 | Hand-fixed (loop start) | 64.2% | 59.2% |
-| Loop winner | 81.7% | 75.8% |
+| **Loop winner** | **81.7%** | **75.8%** |
 | Gain over hand-fixed, points (95% CI) | +17.5 (+5.8 to +30.0) | +16.7 (+8.3 to +26.7) |
 
 Under the loop judge, the gain on fresh questions matches the gain on the 61 questions the loop trained on (+18.0). So it isn't memorization. It's also the first change in this series that's clearly bigger than the noise.
 
 ## Does another calibrated judge see it?
 
-About 95% of passes depend on the loop judge's call (strict row matching rejects any extra column). So the gain could reflect the loop judge's opinion as much as the agent's skill, and I needed a second judge outside the loop. I calibrated 5 open-weights models from labs other than the loop judge's against the 196 cases I'd labeled for the [Jev post]({% post_url 2026-09-30-jev %}). The best became the second judge, Kimi K2 Thinking: it agreed with me 94% of the time. The other 4 were Kimi K2.5, GLM 4.7, DeepSeek V3.2 and Qwen3 Next 80B. Regrading ~900 saved answers cost $5.35.
+About 95% of passes depend on the loop judge's call (strict row matching rejects any extra column). So the gain could reflect the loop judge's opinion as much as the agent's skill, and I needed a second judge outside the loop. I calibrated 5 open-weights models from labs other than the loop judge's against the 196 cases I'd labeled for the [Jev post]({% post_url 2026-09-30-jev %}). The best became the second judge, Kimi K2 Thinking: it agreed with me 94% of the time. The other four were Kimi K2.5, GLM 4.7, DeepSeek V3.2 and Qwen3 Next 80B. Regrading ~900 saved answers cost $5.35.
 
 On fresh questions the judges agree. On the 61 questions the loop trained on, they don't: the loop judge gives the winner 92%, the second judge 80%. I read the 25 answers the loop judge passed and the second judge failed. In 8, the loop judge let real errors through. In 17, I sided with the loop judge, and 9 of those came from one habit: the LEFT JOIN rule. A fictional version (the real questions stay private):
 
@@ -155,14 +157,16 @@ On the 24 fresh questions the loop never saw, the winner explores more: 5.1 tool
 
 | Agent cost | Hand-fixed | Loop winner |
 |---|---:|---:|
-| Per 1,000 attempts | $1.60 | $1.90 |
-| Per 1,000 correct answers (loop judge) | $2.50 | $2.30 |
+| Per 1,000 attempts | $1.60 | **$1.90** |
+| Per 1,000 correct answers (loop judge) | $2.50 | **$2.30** |
 
-It costs ~20% more per attempt and slightly less per correct answer. I didn't record latency.
+It costs ~20% more per attempt and slightly less per correct answer.
 
 # Building a loop for your agent
 
-So was it worth it? For about $25 all-in ($12 of it the loop itself), the agent got ~17 points better on questions it never saw, at about the same cost per correct answer. It worked because I already had an eval I could rerun automatically, with a judge that explains its verdicts. The failures also kept recurring, and they came from the agent's habits (where it puts the logic, what it checks before answering), which a prompt can change. If your setup looks like that, this is the sequence I'd follow:
+So: was it worth it? For about $25 all-in ($12 of it the loop itself), the agent got ~17 points better on questions it never saw, at about the same cost per correct answer. It worked because I already had an eval I could rerun automatically, with a judge that explains its verdicts. The failures also kept recurring, and they came from the agent's habits (where it puts the logic, what it checks before answering), which a prompt can change.
+
+If your setup looks like that, this is the sequence I'd follow:
 
 1. **Start with failures you understand.** Fix harness mismatches by hand first.
 2. **Let a proposer edit a narrow surface**, like the prompt and tool descriptions, with a length cap and a budget.
@@ -171,11 +175,11 @@ So was it worth it? For about $25 all-in ($12 of it the loop itself), the agent 
 5. **Check the winner on fresh tasks.** Where correctness takes judgment, regrade with a second calibrated judge.
 6. **Read the disputed cases and compare cost per correct answer** before you ship the change.
 
-If you don't trust your judge yet, the loop will learn its mistakes along with everything else. Fix the judge before building the loop, by checking its verdicts against answers you've labeled yourself ([how I checked mine]({% post_url 2026-07-10-graders-disagreement %})).
+If you don't trust your judge yet, the loop will learn its mistakes along with everything else. Fix the judge before building the loop, by checking its verdicts against answers you've labeled yourself (and here's [how I checked mine]({% post_url 2026-07-10-graders-disagreement %})).
 
 None of this is SQL-specific. A support bot tuned against a judge that likes apologies will learn to apologize more. Whether that's improvement depends on whether you share the judge's taste, and you only find out by looking.
 
 <nav class="series-pagination" aria-label="AI agent evaluation series navigation">
-  <a href="{% post_url 2026-09-30-jev %}">← Previous: Typed judge</a>
+  <a href="{% post_url 2026-09-30-jev %}">← Previous: Typed judge (Jev)</a>
   <a href="/">All experiments →</a>
 </nav>

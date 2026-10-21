@@ -22,7 +22,7 @@ Experiment code: [exp_03_repeatability_costs](https://github.com/nicpo/ai-agent-
     <li><a href="{% post_url 2026-08-05-graders-agreement %}">When graders agree</a></li>
     <li aria-current="page">Repeatability</li>
     <li><a href="{% post_url 2026-09-17-costs %}">Cost</a></li>
-    <li><a href="{% post_url 2026-09-30-jev %}">Typed judge</a></li>
+    <li><a href="{% post_url 2026-09-30-jev %}">Typed judge (Jev)</a></li>
     <li><a href="{% post_url 2026-10-20-self-improvement-loop %}">Self-improvement loop</a></li>
   </ol>
 </nav>
